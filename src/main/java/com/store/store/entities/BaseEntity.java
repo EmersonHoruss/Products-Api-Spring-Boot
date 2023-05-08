@@ -21,6 +21,6 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "isActivated default true", nullable = false)
+    @Column(columnDefinition = "boolean default true", nullable = false)
     private boolean isActivated;
 }
