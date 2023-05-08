@@ -23,7 +23,7 @@ public class ProductEntity extends BaseEntity {
 	@Column(name = "name", nullable = false, unique = true, length = 180)
 	private String name;
 	
-	@Column(name = "description", nullable = false, unique = true, length = 256)
+	@Column(name = "description", nullable = true, unique = false, length = 256)
 	private String description;
 
 	@ManyToOne(optional = false)
