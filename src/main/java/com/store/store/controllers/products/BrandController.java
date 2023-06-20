@@ -1,25 +1,19 @@
 package com.store.store.controllers.products;
 
-import com.store.store.entities.products.BrandEntity;
+import com.store.store.DTOs.products.brand.BrandSaveDTO;
+import com.store.store.DTOs.products.brand.BrandShowDTO;
+import com.store.store.DTOs.products.brand.BrandUpdateDTO;
+import com.store.store.constants.ProductURLConstant;
+import com.store.store.controllers.BaseController;
+import com.store.store.entities.products.*;
 import com.store.store.services.products.BrandService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-public class BrandController {
-    @Autowired
-    private BrandService service;
-
-    @GetMapping("")
-    public ResponseEntity<?> getAll(){
-        try {
-            BrandEntity brand = new BrandEntity("test");
-            return ResponseEntity.status(HttpStatus.OK).body(service.save(brand));
-        }catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("\"error\":" + e.getMessage());
-        }
-    }
+@RestController
+@CrossOrigin(origins = "*")
+@RequestMapping(ProductURLConstant.RESOURCE_BRAND)
+public class BrandController extends BaseController<BrandEntity, BrandService, BrandSaveDTO, BrandShowDTO,
+        BrandUpdateDTO> {
 }

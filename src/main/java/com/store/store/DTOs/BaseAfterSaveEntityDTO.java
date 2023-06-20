@@ -1,15 +1,15 @@
 package com.store.store.DTOs;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@SuperBuilder
-public class BaseDTO {
+@NoArgsConstructor
+public class BaseAfterSaveEntityDTO extends BaseEntityDTO {
     @NotNull
     private Long id;
 

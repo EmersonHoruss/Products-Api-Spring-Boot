@@ -1,17 +1,17 @@
 package com.store.store.DTOs.products.productPhoto;
 
-import com.store.store.DTOs.BaseDTO;
+import com.store.store.DTOs.BaseAfterSaveEntityDTO;
 import com.store.store.DTOs.products.photo.PhotoShowDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@SuperBuilder
-public class ProductPhotoShowDTO extends BaseDTO {
+@NoArgsConstructor
+public class ProductPhotoShowDTO extends BaseAfterSaveEntityDTO {
     @NotNull
     private PhotoShowDTO photo;
 }

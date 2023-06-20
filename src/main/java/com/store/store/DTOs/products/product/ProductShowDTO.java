@@ -1,12 +1,12 @@
 package com.store.store.DTOs.products.product;
 
-import com.store.store.DTOs.BaseDTO;
+import com.store.store.DTOs.BaseAfterSaveEntityDTO;
 import com.store.store.DTOs.products.size.SizeShowDTO;
 import com.store.store.DTOs.products.type.TypeShowDTO;
 import com.store.store.DTOs.products.brand.BrandShowDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -14,8 +14,8 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@SuperBuilder
-public class ProductShowDTO extends BaseDTO {
+@NoArgsConstructor
+public class ProductShowDTO extends BaseAfterSaveEntityDTO {
     @PositiveOrZero
     private short amount;
 

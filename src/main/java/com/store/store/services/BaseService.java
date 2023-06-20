@@ -1,80 +1,63 @@
 package com.store.store.services;
 
 import com.store.store.entities.BaseEntity;
+import com.store.store.exceptions.ResourceNotFoundException;
 import com.store.store.repositories.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.transaction.Transactional;
-import java.util.List;
+
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public class BaseService <E extends BaseEntity> {
+public abstract class BaseService<E extends BaseEntity> {
     @Autowired
     protected BaseRepository<E> baseRepository;
 
-    @Transactional
-    public List<E> find() throws Exception {
+    public Page<E> get(Specification<E> specification, Pageable pageable) {
         try {
-            List<E> entities = baseRepository.findAll();
-            return entities;
-        }catch(Exception e) {
-            throw new Exception(e.getMessage());
+            Page<E> page = baseRepository.findAll(specification, pageable);
+            return new PageImpl<E>(page.getContent(), pageable, page.getTotalElements());
+        } catch (RuntimeException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
     }
 
-    @Transactional
-    public E findById(Long id) throws Exception {
-        try {
-            Optional<E> entityOptional = baseRepository.findById(id);
-            return entityOptional.get();
-        }catch(Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    public E getById(Long id) {
+        return findById(id);
     }
 
     @Transactional
-    public E save(E entity) throws Exception {
-        try {
-            entity = baseRepository.save(entity);
-            return entity;
-        }catch(Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    public E create(E entity) {
+        return baseRepository.save(entity);
     }
 
     @Transactional
-    public E update(Long id, E entity) throws Exception {
-        try {
-            baseRepository.findById(id).get();
-            return baseRepository.save(entity);
-        }catch(Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    public E update(E entity) {
+        findById(entity.getId());
+        return baseRepository.save(entity);
     }
 
 
     @Transactional
-    public E softDelete(Long id) throws Exception {
-        try {
-            Optional<E> entityOptional = baseRepository.findById(id);
-            E entity = entityOptional.get();
-            entity.setActivated(true);
-            entity = baseRepository.save(entity);
-            return entity;
-        }catch(Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    public E deleteSoft(Long id) {
+        E entity = findById(id);
+        entity.setActivated(false);
+        return baseRepository.save(entity);
     }
 
     @Transactional
-    public E hardDelete(Long id) throws Exception {
-        try {
-            Optional<E> entityOptional = baseRepository.findById(id);
-            E entity = baseRepository.getById(id);
-            baseRepository.deleteById(id);
-            return entity;
-        }catch(Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    public E deleteHard(Long id) {
+        E entity = findById(id);
+        baseRepository.deleteById(id);
+        return entity;
     }
+
+    public abstract E findById(Long id);
 }

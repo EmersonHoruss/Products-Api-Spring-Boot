@@ -1,12 +1,6 @@
 package com.store.store.constants;
 
 public class SpecificationConstant {
-    public static final String SYMBOL_UNDERSCORE = "%5F";
-    public static final String SYMBOL_DOT = "%2E";
-    public static final String SYMBOL_COMMA = "%2C";
-    public static final String SYMBOL_OPEN_PARENTHESIS = "%28";
-    public static final String SYMBOL_CLOSE_PARENTHESIS = "%29";
-
     public static final String OPERATOR_NOT = "not";
     public static final String OPERATOR_AND = "and";
     public static final String OPERATOR_OR = "or";

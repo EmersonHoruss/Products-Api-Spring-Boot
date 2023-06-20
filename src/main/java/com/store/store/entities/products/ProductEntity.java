@@ -17,10 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductEntity extends BaseEntity {
-	@Column(name = "amount", nullable = false, unique = false)
+	@Column(name = "amount", nullable = true, unique = false)
 	private short amount;
 	
-	@Column(name = "name", nullable = false, unique = true, length = 180)
+	@Column(name = "name", nullable = true, unique = true, length = 180)
 	private String name;
 	
 	@Column(name = "description", nullable = true, unique = false, length = 256)

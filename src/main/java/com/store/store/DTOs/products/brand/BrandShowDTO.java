@@ -1,16 +1,16 @@
 package com.store.store.DTOs.products.brand;
 
-import com.store.store.DTOs.BaseDTO;
+import com.store.store.DTOs.BaseAfterSaveEntityDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@SuperBuilder
-public class BrandShowDTO extends BaseDTO {
+@NoArgsConstructor
+public class BrandShowDTO extends BaseAfterSaveEntityDTO {
     @Size(min = 1, max = 45)
     private String name;
 }

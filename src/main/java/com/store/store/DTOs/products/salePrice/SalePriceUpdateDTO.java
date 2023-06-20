@@ -1,9 +1,9 @@
 package com.store.store.DTOs.products.salePrice;
 
-import com.store.store.DTOs.BaseDTO;
+import com.store.store.DTOs.BaseAfterSaveEntityDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.PositiveOrZero;
@@ -11,8 +11,8 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@SuperBuilder
-public class SalePriceUpdateDTO extends BaseDTO {
+@NoArgsConstructor
+public class SalePriceUpdateDTO extends BaseAfterSaveEntityDTO {
     @Size(min = 1, max = 45)
     private String name;
 
