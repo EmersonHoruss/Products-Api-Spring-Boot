@@ -1,6 +1,6 @@
 package com.store.store.utils.mappers;
 
-import com.store.store.DTOs.BaseEntityDTO;
+import com.store.store.DTOs.entities.BaseDTO;
 import com.store.store.DTOs.reponses.ResponseDTO;
 import com.store.store.entities.BaseEntity;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 @ToString
-public class MapperBaseController<E extends BaseEntity> {
+public class MapperBaseController<E extends BaseEntity, DTO extends BaseDTO> {
 
     private @Getter MapperBaseControllerTypes mapperTypes;
 
@@ -20,16 +20,16 @@ public class MapperBaseController<E extends BaseEntity> {
     }
 
     public ResponseDTO mapToDTOs(Page<E> entities, String query) {
-        Page<BaseEntityDTO> entitiesDTO = entities.map(mapperTypes::mapToDTO);
+        Page<DTO> entitiesDTO = entities.map(mapperTypes::mapToDTO);
         return new ResponseDTO(entitiesDTO.getContent(), entitiesDTO, query);
     }
 
     public ResponseDTO mapToDTO(E entity) {
-        BaseEntityDTO entityDTO = mapperTypes.mapToDTO(entity);
+        DTO entityDTO = mapperTypes.mapToDTO(entity);
         return new ResponseDTO(entityDTO);
     }
 
-    public ResponseDTO mapToEntity(BaseEntityDTO entityDTO) {
+    public ResponseDTO mapToEntity(DTO entityDTO) {
         E entity = mapperTypes.mapToEntity(entityDTO);
         return new ResponseDTO(entity);
     }
@@ -37,26 +37,27 @@ public class MapperBaseController<E extends BaseEntity> {
     public class MapperBaseControllerTypes {
         private Mapper mapper = null;
         private Type entityType = null;
-        private Type showDTOType = null;
+        private Type entityDTOType = null;
 
         public MapperBaseControllerTypes(Class<?> baseControllerClass) {
             mapper = new Mapper();
             try {
                 String canonicalName = baseControllerClass.getCanonicalName();
-                Type[] types = ((ParameterizedType) Class.forName(canonicalName).getGenericSuperclass()).getActualTypeArguments();
+                Type genericSuperClass = Class.forName(canonicalName).getGenericSuperclass();
+                Type[] types = ((ParameterizedType) genericSuperClass).getActualTypeArguments();
                 entityType = types[0];
-                showDTOType = types[3];
+                entityDTOType = types[2];
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public E mapToEntity(BaseEntityDTO entityDTO) {
+        public E mapToEntity(DTO entityDTO) {
             return mapper.map(entityDTO, entityType);
         }
 
-        public BaseEntityDTO mapToDTO(BaseEntity entity) {
-            return mapper.map(entity, showDTOType);
+        public DTO mapToDTO(E entity) {
+            return mapper.map(entity, entityDTOType);
         }
     }
 }

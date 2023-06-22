@@ -1,6 +1,6 @@
 package com.store.store.controllers;
 
-import com.store.store.DTOs.BaseEntityDTO;
+import com.store.store.DTOs.entities.BaseDTO;
 import com.store.store.DTOs.reponses.ResponseDTO;
 import com.store.store.DTOs.tests.ProductTestDTO;
 import com.store.store.entities.BaseEntity;
@@ -10,8 +10,6 @@ import com.store.store.services.BaseService;
 import com.store.store.utils.mappers.MapperBaseController;
 import com.store.store.utils.specification.Specification;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.convention.NameTokenizers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,16 +19,10 @@ import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
 
-public abstract class BaseController<
-        E extends BaseEntity,
-        S extends BaseService<E>,
-        SaveDTO extends BaseEntityDTO,
-        ShowDTO extends BaseEntityDTO,
-        UpdateDTO extends BaseEntityDTO> {
+public abstract class BaseController<E extends BaseEntity, S extends BaseService<E>, DTO extends BaseDTO> {
     @Autowired
     private S service;
-    private MapperBaseController<E> mapper =
-            new MapperBaseController(getClass());
+    private MapperBaseController<E, DTO> mapper = new MapperBaseController(getClass());
 
     @GetMapping("")
     public ResponseEntity<ResponseDTO> get(@Valid @RequestParam(required = false) String query, Pageable pageable) {
@@ -45,15 +37,17 @@ public abstract class BaseController<
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseDTO> create(@Valid @RequestBody SaveDTO saveDTO) {
-        E entity = mapper.getMapperTypes().mapToEntity(saveDTO);
-        E savedEntity = service.create(entity);
-        return ResponseEntity.status(HttpStatus.OK).body(mapper.mapToDTO(savedEntity));
+    public Object create(@Valid @RequestBody DTO entityDTO) {
+        E entity = mapper.getMapperTypes().mapToEntity(entityDTO);
+        entity = service.save(entity);
+
+        //return ResponseEntity.status(HttpStatus.OK).body(mapper.mapToDTO(savedEntity));
+        return entity;
     }
 
     @PutMapping("")
-    public ResponseEntity<ResponseDTO> update(@Valid @RequestBody UpdateDTO updateDTO) {
-        E entity = mapper.getMapperTypes().mapToEntity(updateDTO);
+    public ResponseEntity<ResponseDTO> update(@Valid @RequestBody DTO entityDTO) {
+        E entity = mapper.getMapperTypes().mapToEntity(entityDTO);
         E savedEntity = service.update(entity);
         return ResponseEntity.status(HttpStatus.OK).body(mapper.mapToDTO(savedEntity));
     }
